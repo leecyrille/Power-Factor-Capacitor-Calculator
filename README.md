@@ -1,5 +1,9 @@
 # Nominal Test Capacitance Calculator
 
+🔗 **Live Calculator:**  
+https://leecyrille.github.io/Power-Factor-Capacitor-Calculator/
+
+
 A professional web-based calculator for determining capacitor values and discharge resistances in power system applications.
 
 ## Features
@@ -121,3 +125,4 @@ where V_phase = V_LL / √3
 ## License
 
 Proprietary - Pace Technologies Inc.
+
