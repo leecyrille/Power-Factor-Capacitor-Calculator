@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nominal Test Capacitance Calculator – Pace Technologies</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a4d7a 0%, #2d7a5f 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a4d7a 0%, #2d7a5f 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .logo {
+            max-width: 250px;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #1a4d7a;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2d7a5f;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #2d7a5f;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2d7a5f;
+        }
+
+        .radio-option label {
+            margin: 0;
+            font-weight: normal;
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #2d7a5f;
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #1a4d7a;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .result-value {
+            font-size: 20px;
+            color: #2d7a5f;
+            font-weight: 700;
+        }
+
+        .result-note {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .footer {
+            padding: 15px;
+            text-align: center;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 12px;
+            border-top: 1px solid #ddd;
+        }
+
+        @media (max-width: 600px) {
+            .content {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .radio-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">E5QPVV33AN6J-153664360-780285</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">64331a67-5cb8-4668-b3da-3a0a78bdda8b</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://pacetechnologiesinc.sharepoint.com/sites/Main/_layouts/15/DocIdRedir.aspx?ID=E5QPVV33AN6J-153664360-780285, E5QPVV33AN6J-153664360-780285</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://www.pacetechnologies.com/logo.png" alt="Pace Technologies Inc." class="logo" onerror="this.style.display='none'">
+            <h1>Nominal Test Capacitance Calculator</h1>
+            <p>Power System Capacitance & Discharge Calculations</p>
+        </div>
+
+        <div class="content">
+            <div class="form-section">
+                <h2 class="section-title">Input Parameters</h2>
+
+                <div class="form-group">
+                    <label>System Type</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="singlePhase" name="phaseType" value="single" onchange="calculate()">
+                            <label for="singlePhase">Single Phase / Per Capacitor</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="threePhase" name="phaseType" value="three" checked onchange="calculate()">
+                            <label for="threePhase">Three Phase Bank (Δ or Y)</label>
+                        </div>
+                    </div>
+                    <div class="result-note" style="margin-top: 8px;">
+                        💡 Select Single Phase / Per Capacitor if calculating one capacitor's value, even if it will be used in a 3-phase system.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="kvar"><span id="kvarLabel">Reactive Power (kVAR)</span></label>
+                    <input type="number" id="kvar" value="1.00" step="0.01" min="0.01" oninput="calculate()">
+                </div>
+
+                <div class="form-group">
+                    <label for="voltage"><span id="voltageLabel">Voltage (V)</span></label>
+                    <input type="number" id="voltage" value="600" step="1" min="1" oninput="calculate()">
+                </div>
+
+                <div class="form-group">
+                    <label for="frequency">Frequency (Hz)</label>
+                    <input type="number" id="frequency" value="60" step="1" min="1" oninput="calculate()">
+                </div>
+
+                <div class="form-group">
+                    <label>Connection Type</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="delta" name="connectionType" value="delta" checked onchange="calculate()">
+                            <label for="delta">Delta (Δ)</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="wye" name="connectionType" value="wye" onchange="calculate()">
+                            <label for="wye">Wye (Y)</label>
+                        </div>
+                    </div>
+                    <div class="result-note" style="margin-top: 8px;">
+                        Only used for Three Phase Bank. For Single / Per-Cap, connection does not change the math.
+                    </div>
+                </div>
+            </div>
+
+            <div class="results" id="results" aria-live="polite">
+                <h2 class="section-title">Results</h2>
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            © 2025 Lee Maskell - Pace Technologies Inc.
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            // Get input values
+            const phaseType = document.querySelector('input[name="phaseType"]:checked').value;
+            const kvar = parseFloat(document.getElementById('kvar').value);
+            const voltage = parseFloat(document.getElementById('voltage').value);
+            const frequency = parseFloat(document.getElementById('frequency').value);
+            const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
+
+            // Update labels based on phase type
+            if (phaseType === 'single') {
+                document.getElementById('kvarLabel').textContent = 'Reactive Power (kVAR)';
+                document.getElementById('voltageLabel').textContent = 'Voltage (V)';
+            } else {
+                document.getElementById('kvarLabel').textContent = 'Total Bank Reactive Power (kVAR)';
+                document.getElementById('voltageLabel').textContent = 'Line-to-Line Voltage (V)';
+            }
+
+            // Validate inputs
+            if (isNaN(kvar) || isNaN(voltage) || isNaN(frequency) || kvar <= 0 || voltage <= 0 || frequency <= 0) {
+                alert('Please enter valid positive values for all fields.');
+                return;
+            }
+
+            const omega = 2 * Math.PI * frequency;
+            let capacitanceMicrofarads;
+            let singleCapMicrofarads;
+            let deltaEquivalentMicrofarads;
+            
+            // Calculate capacitance based on phase type and connection
+            if (phaseType === 'single') {
+                // Single phase: C = Q / (ω * V²)
+                // Q in VAR, V in volts, ω in rad/s
+                const qVar = kvar * 1000;
+                capacitanceMicrofarads = (qVar / (omega * voltage * voltage)) * 1e6;
+                
+            } else {
+                // Three phase
+                const qVar = kvar * 1000;
+                
+                if (connectionType === 'delta') {
+                    // For delta: Each capacitor sees line voltage
+                    // Total Q = 3 * ω * C * V²
+                    // C per phase = Q / (3 * ω * V²)
+                    singleCapMicrofarads = (qVar / (3 * omega * voltage * voltage)) * 1e6;
+                    
+                    // Delta equivalent (when measuring across two capacitors in series)
+                    // Two capacitors in series = C/2, plus one in parallel = C/2 + C = 3C/2
+                    deltaEquivalentMicrofarads = (3 * singleCapMicrofarads) / 2;
+                    
+                    capacitanceMicrofarads = singleCapMicrofarads;
+                    
+                } else {
+                    // For wye: Each capacitor sees phase voltage (line voltage / sqrt(3))
+                    const phaseVoltage = voltage / Math.sqrt(3);
+                    // Total Q = 3 * ω * C * Vph²
+                    capacitanceMicrofarads = (qVar / (3 * omega * phaseVoltage * phaseVoltage)) * 1e6;
+                }
+            }
+
+            // ----- Discharge calculations (to 50 V in 300 s) -----
+            const targetVoltage = 50;
+            const timeSeconds = 300;
+
+            function engRes(R) {
+                if (R >= 1e6) return {v: R/1e6, u: 'MΩ'};
+                if (R >= 1e3) return {v: R/1e3, u: 'kΩ'};
+                return {v: R, u: 'Ω'};
+            }
+
+            function R_for(Ceq_F, V0) {
+                if (V0 <= targetVoltage || Ceq_F <= 0) return null;
+                return -timeSeconds / (Ceq_F * Math.log(targetVoltage / V0));
+            }
+
+            let R_LL = null, R_LN = null;
+            const Vph = voltage / Math.sqrt(3);
+
+            if (phaseType === 'single') {
+                // single-phase: Ceq = C, V0 = voltage
+                const Csingle_F = (capacitanceMicrofarads * 1e-6);
+                R_LL = R_for(Csingle_F, voltage);
+
+            } else if (connectionType === 'delta') {
+                // 3φ delta: Ceq_LL = 1.5 * C_phase
+                const Cphase_F = (singleCapMicrofarads * 1e-6);
+                const Ceq_LL = 1.5 * Cphase_F;
+                R_LL = R_for(Ceq_LL, voltage);
+
+            } else {
+                // 3φ wye: Ceq_LL = 0.5 * C_phase; LN uses C_phase at Vph
+                const Cphase_F = (capacitanceMicrofarads * 1e-6); // per-phase C already computed
+                const Ceq_LL = 0.5 * Cphase_F;
+                R_LL = R_for(Ceq_LL, voltage);
+                R_LN = R_for(Cphase_F, Vph);
+            }
+
+            // Display results
+            let resultsHTML = '';
+            
+            if (phaseType === 'single') {
+                resultsHTML += `
+                    <div class="result-item">
+                        <div class="result-label">Capacitance</div>
+                        <div class="result-value">${capacitanceMicrofarads.toFixed(4)} µF</div>
+                    </div>
+                `;
+            } else if (connectionType === 'delta') {
+                resultsHTML += `
+                    <div class="result-item">
+                        <div class="result-label">Single Capacitor Value</div>
+                        <div class="result-value">${singleCapMicrofarads.toFixed(4)} µF</div>
+                        <div class="result-note">Per phase capacitor rating</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Delta Configuration Measurement</div>
+                        <div class="result-value">${deltaEquivalentMicrofarads.toFixed(4)} µF</div>
+                        <div class="result-note">Expected multimeter reading across line terminals (two caps in series parallel with one)</div>
+                    </div>
+                `;
+            } else {
+                resultsHTML += `
+                    <div class="result-item">
+                        <div class="result-label">Capacitance (Per Phase)</div>
+                        <div class="result-value">${capacitanceMicrofarads.toFixed(4)} µF</div>
+                        <div class="result-note">Wye configuration</div>
+                    </div>
+                `;
+            }
+
+            // Add discharge results
+            if (R_LL) {
+                const {v,u} = engRes(R_LL);
+                const scope =
+                    (phaseType === 'single') ? '' :
+                    (connectionType === 'delta') ? ' (Line-to-Line)' :
+                    ' (Line-to-Line)';
+
+                resultsHTML += `
+                    <div class="result-item">
+                        <div class="result-label">Suggested Discharge Resistance${scope}</div>
+                        <div class="result-value">${v.toFixed(2)} ${u}</div>
+                        <div class="result-note">To discharge from ${voltage}V to under 50V in 5 minutes</div>
+                    </div>`;
+            }
+
+            if (R_LN) {
+                const {v,u} = engRes(R_LN);
+                resultsHTML += `
+                    <div class="result-item">
+                        <div class="result-label">Discharge Resistance (Line-to-Neutral)</div>
+                        <div class="result-value">${v.toFixed(2)} ${u}</div>
+                        <div class="result-note">To discharge from ${Vph.toFixed(1)}V to under 50V in 5 minutes</div>
+                    </div>`;
+            }
+
+            document.getElementById('resultsContent').innerHTML = resultsHTML;
+            document.getElementById('results').classList.add('show');
+        }
+
+        // Calculate on page load with default values
+        window.addEventListener('DOMContentLoaded', function() {
+            calculate();
+        });
+    </script>
+</body>
+</html>
