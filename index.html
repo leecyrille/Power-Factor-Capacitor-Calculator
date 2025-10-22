@@ -242,8 +242,19 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="voltage"><span id="voltageLabel">Voltage (V)</span></label>
+                    <label for="voltage"><span id="voltageLabel">Nameplate Voltage (V)</span></label>
                     <input type="number" id="voltage" value="600" step="1" min="1" oninput="calculate()">
+                    <div class="result-note" style="margin-top: 5px;">
+                        Rated voltage from capacitor nameplate
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="actualVoltage"><span id="actualVoltageLabel">Actual System Voltage (V)</span></label>
+                    <input type="number" id="actualVoltage" value="600" step="1" min="1" oninput="calculate()">
+                    <div class="result-note" style="margin-top: 5px;">
+                        Measured operating voltage for current calculations
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -286,20 +297,24 @@
             const phaseType = document.querySelector('input[name="phaseType"]:checked').value;
             const kvar = parseFloat(document.getElementById('kvar').value);
             const voltage = parseFloat(document.getElementById('voltage').value);
+            const actualVoltage = parseFloat(document.getElementById('actualVoltage').value);
             const frequency = parseFloat(document.getElementById('frequency').value);
             const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
 
             // Update labels based on phase type
             if (phaseType === 'single') {
                 document.getElementById('kvarLabel').textContent = 'Reactive Power (kVAR)';
-                document.getElementById('voltageLabel').textContent = 'Voltage (V)';
+                document.getElementById('voltageLabel').textContent = 'Nameplate Voltage (V)';
+                document.getElementById('actualVoltageLabel').textContent = 'Actual System Voltage (V)';
             } else {
                 document.getElementById('kvarLabel').textContent = 'Total Bank Reactive Power (kVAR)';
-                document.getElementById('voltageLabel').textContent = 'Line-to-Line Voltage (V)';
+                document.getElementById('voltageLabel').textContent = 'Nameplate Line-to-Line Voltage (V)';
+                document.getElementById('actualVoltageLabel').textContent = 'Actual Line-to-Line Voltage (V)';
             }
 
             // Validate inputs
-            if (isNaN(kvar) || isNaN(voltage) || isNaN(frequency) || kvar <= 0 || voltage <= 0 || frequency <= 0) {
+            if (isNaN(kvar) || isNaN(voltage) || isNaN(actualVoltage) || isNaN(frequency) || 
+                kvar <= 0 || voltage <= 0 || actualVoltage <= 0 || frequency <= 0) {
                 alert('Please enter valid positive values for all fields.');
                 return;
             }
@@ -377,6 +392,40 @@
                 R_LN = R_for(Cphase_F, Vph);
             }
 
+            // ----- Current calculations at actual voltage -----
+            // I = Q / V for capacitive current
+            // For capacitors: Ic = V * ω * C
+            
+            let lineCurrent = null;
+            let capacitorCurrent = null;
+            let currentDescription = '';
+            
+            const actualOmega = 2 * Math.PI * frequency;
+            
+            if (phaseType === 'single') {
+                // Single phase: I = V * ω * C
+                const C_F = capacitanceMicrofarads * 1e-6;
+                lineCurrent = actualVoltage * actualOmega * C_F;
+                currentDescription = 'Current through capacitor';
+                
+            } else if (connectionType === 'delta') {
+                // Delta: 
+                // Capacitor current (phase current): Ic = V_LL * ω * C
+                // Line current: I_line = √3 * I_capacitor
+                const C_F = singleCapMicrofarads * 1e-6;
+                capacitorCurrent = actualVoltage * actualOmega * C_F;
+                lineCurrent = Math.sqrt(3) * capacitorCurrent;
+                currentDescription = 'Line current (measured on input line to bank)';
+                
+            } else {
+                // Wye:
+                // Capacitor current = Line current: I = V_phase * ω * C
+                const actualVph = actualVoltage / Math.sqrt(3);
+                const C_F = capacitanceMicrofarads * 1e-6;
+                lineCurrent = actualVph * actualOmega * C_F;
+                currentDescription = 'Line current (same as capacitor current in Wye)';
+            }
+
             // Display results
             let resultsHTML = '';
             
@@ -433,6 +482,25 @@
                         <div class="result-label">Discharge Resistance (Line-to-Neutral)</div>
                         <div class="result-value">${v.toFixed(2)} ${u}</div>
                         <div class="result-note">To discharge from ${Vph.toFixed(1)}V to under 50V in 5 minutes</div>
+                    </div>`;
+            }
+
+            // Add current measurement results
+            if (lineCurrent !== null) {
+                resultsHTML += `
+                    <div class="result-item">
+                        <div class="result-label">Expected Line Current @ ${actualVoltage}V</div>
+                        <div class="result-value">${lineCurrent.toFixed(2)} A</div>
+                        <div class="result-note">${currentDescription}</div>
+                    </div>`;
+            }
+
+            if (capacitorCurrent !== null) {
+                resultsHTML += `
+                    <div class="result-item">
+                        <div class="result-label">Expected Capacitor Current (Delta)</div>
+                        <div class="result-value">${capacitorCurrent.toFixed(2)} A</div>
+                        <div class="result-note">Current through individual capacitor element</div>
                     </div>`;
             }
 

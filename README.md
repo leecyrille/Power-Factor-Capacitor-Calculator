@@ -18,6 +18,11 @@ A professional web-based calculator for determining capacitor values and dischar
   - Line-to-neutral discharge resistance (for Wye)
   - Calculated to discharge from operating voltage to under 50V in 5 minutes
 
+- **Online Current Measurements**
+  - Expected line current at actual operating voltage
+  - Capacitor current for Delta configurations
+  - Helps verify proper operation during energized testing
+
 - **Real-Time Updates**
   - Automatic calculation on input change
   - No button clicks needed
@@ -40,7 +45,8 @@ Simply open `index.html` in any modern web browser. The calculator will:
 
 - **System Type**: Single Phase/Per Capacitor or Three Phase Bank
 - **Reactive Power (kVAR)**: Total bank reactive power for 3-phase, individual capacitor power for single phase
-- **Voltage (V)**: Line-to-line voltage for 3-phase, applied voltage for single phase
+- **Nameplate Voltage (V)**: Rated voltage from capacitor nameplate (line-to-line for 3-phase)
+- **Actual System Voltage (V)**: Measured operating voltage for current calculations
 - **Frequency (Hz)**: System frequency (typically 50 or 60 Hz)
 - **Connection Type**: Delta (Δ) or Wye (Y) - only applicable for three phase banks
 
@@ -78,6 +84,28 @@ where V_phase = V_LL / √3
 R = -t / (C_eq × ln(V_target / V_0))
 where t = 300s, V_target = 50V
 ```
+
+### Current Calculations
+
+**Single Phase:**
+```
+I = V_actual × ω × C
+```
+
+**Three Phase Delta:**
+```
+I_capacitor = V_LL × ω × C_phase
+I_line = √3 × I_capacitor
+```
+- Line current is what you measure on the input line to the bank
+- Capacitor current is the current through each individual capacitor element
+
+**Three Phase Wye:**
+```
+I_line = I_capacitor = V_phase × ω × C_phase
+where V_phase = V_LL / √3
+```
+- In Wye, line current equals capacitor current
 
 ## Technical Details
 
